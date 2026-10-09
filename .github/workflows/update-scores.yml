@@ -1,0 +1,61 @@
+name: Update scores
+
+on:
+  schedule:
+    # Every 30 minutes from 7 PM to about 4 AM Eastern, plus once at noon.
+    # GitHub runs these in UTC and sometimes starts them a few minutes late.
+    - cron: "*/30 23 * * *"
+    - cron: "*/30 0-8 * * *"
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: update-scores
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Get the latest scores
+        id: scores
+        run: node update-scores.mjs
+
+      - name: Save data.json to the repository
+        if: steps.scores.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Update scores"
+          git pull --rebase --autostash
+          git push
+
+      - uses: actions/configure-pages@v5
+        if: steps.scores.outputs.changed == 'true' || github.event_name != 'schedule'
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.scores.outputs.changed == 'true' || github.event_name != 'schedule'
+        with:
+          path: .
+
+      - name: Publish the site
+        id: deploy
+        if: steps.scores.outputs.changed == 'true' || github.event_name != 'schedule'
+        uses: actions/deploy-pages@v4
