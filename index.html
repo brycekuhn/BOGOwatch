@@ -94,6 +94,11 @@ section{margin-top:44px}
 .go .btn{display:inline-flex;align-items:center;text-decoration:none;color:var(--ink)}
 .go .btn.save{margin-top:0;color:var(--on-red)}
 .th span{line-height:1}
+.codes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.code{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 8px 8px 14px;flex:1 1 240px;max-width:340px}
+.code .cl{display:block;font-size:14px;color:var(--ink-2)}
+.code .cv{display:block;font:700 28px/1.05 var(--display);letter-spacing:.04em;-webkit-user-select:all;user-select:all}
+.code .btn{margin-left:auto}
 .used{margin:16px 0 0;color:var(--ink-2)}
 .link{appearance:none;-webkit-appearance:none;background:none;border:0;padding:2px 0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font:inherit}
 .useform{margin-top:16px}
@@ -240,9 +245,11 @@ section{margin-top:44px}
     for (var s = DATA.start; s <= TODAY; s = add(s, 1)) { total++; if (status(s) === "yes") yes++; }
     var icon = lit ? "\uD83D\uDEA8" : (st === "unlogged" || st === "pre") && on.size ? "\u23F3" : "\uD83D\uDEAB";
     var h = '<div class="hero"><div class="lamp' + (lit ? " on" : "") + (lit && first ? " flash" : "") + '" aria-hidden="true">' + icon + '</div><div>';
-    shareMsg = (icon + " Firehouse BOGO today? " + word + ". " + why + (next ? " Next chance: " + next : "")).replace(/your teams/g, "the teams");
+    var codeList = lit ? todaysCodes() : [];
+    var codeText = codeList.length ? " Use code " + joinList(codeList.map(function (t) { return CODES[t]; })).replace(" and ", " or ").replace(", and ", ", or ") + "." : "";
+    shareMsg = (icon + " Firehouse BOGO today? " + word + ". " + why + codeText + (next && !lit ? " Next chance: " + next : "")).replace(/your teams/g, "the teams");
     h += '<h1 class="q">Firehouse BOGO today?</h1><p class="ans' + (lit ? " yes" : "") + '">' + word + '</p><p class="why">' + why + "</p>" +
-      (lit ? linksHTML(true, true) + useHTML(TODAY) : '<div class="go big">' + shareHTML() + "</div>") +
+      (lit ? codesHTML(codeList) + linksHTML(true, true) + useHTML(TODAY) : '<div class="go big">' + shareHTML() + "</div>") +
       (shareNote ? '<p class="note" role="status">' + esc(shareNote) + "</p>" : "") + "</div></div>";
     h += '<dl class="rows"><div class="row"><dt>Tonight</dt><dd>' + tonight + "</dd></div>";
     if (next) h += '<div class="row"><dt>Next chance</dt><dd>' + next + "</dd></div>";
@@ -286,6 +293,43 @@ section{margin-top:44px}
     return '<section aria-labelledby="th-h"><h2 id="th-h">Theme</h2><p class="sub">Auto uses the colours of the team that won last night.</p><div class="themes" role="group" aria-labelledby="th-h">' + CLUBS.map(function (x) {
       return '<button class="th" data-club-pick="' + x.c + '" aria-pressed="' + (club === x.c) + '"' + (x.c === "auto" ? ' title="Uses the colours of the team that won last night"' : "") + ">" + swatch(x) + "<span>" + x.n + "</span></button>";
     }).join("") + "</div></section>";
+  }
+
+  var CODES = { OTT: "SENSWIN", CGY: "FLAMESWIN", EDM: "OILERSWIN", TOR: "LEAFSWIN" };
+  var NAME_TO_AB = { senators: "OTT", sens: "OTT", leafs: "TOR", "maple leafs": "TOR", oilers: "EDM", flames: "CGY", canucks: "VAN", jets: "WPG", canadiens: "MTL" };
+  var copied = "", copyTimer = null;
+  function loadCodes() {
+    if (!window.fetch) return;
+    fetch("codes.json", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j || typeof j !== "object") return;
+        var next = {};
+        Object.keys(j).forEach(function (k) {
+          var ab = TEAMS[k.toUpperCase()] ? k.toUpperCase() : NAME_TO_AB[k.toLowerCase()];
+          var code = String(j[k] || "").trim().toUpperCase();
+          if (ab && /^[A-Z0-9-]{1,24}$/.test(code)) next[ab] = code;
+        });
+        if (JSON.stringify(next) !== JSON.stringify(CODES)) { CODES = next; render(); }
+      })
+      .catch(function () {});
+  }
+  function todaysCodes() {
+    var winners = wins(add(TODAY, -1)).map(function (g) { return g.w; });
+    return PRIORITY.filter(function (t) { return winners.indexOf(t) > -1 && CODES[t]; });
+  }
+  function codesHTML(list) {
+    if (!list.length) return "";
+    return '<div class="codes">' + list.map(function (t) {
+      var c = CODES[t];
+      return '<div class="code"><div><span class="cl">' + TEAMS[t] + " code</span>" + '<span class="cv">' + c + "</span></div>" +
+        '<button class="btn" data-copy="' + c + '" aria-label="Copy code ' + c + '">' + (copied === c ? "Copied" : "Copy") + "</button></div>";
+    }).join("") + "</div>";
+  }
+  function copyCode(c) {
+    function done(t) { copied = c; shareNote = t || ""; render(); clearTimeout(copyTimer); copyTimer = setTimeout(function () { copied = ""; shareNote = ""; render(); }, 2500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(c).then(function () { done(""); }, function () { shareNote = "Press and hold the code to copy it."; render(); });
+    else { shareNote = "Press and hold the code to copy it."; render(); }
   }
 
   var LS_USED = "bogo-used-v1", LS_AMT = "bogo-last-amount-v1";
@@ -422,6 +466,7 @@ section{margin-top:44px}
     if (el.dataset.pick) return '[data-pick="' + el.dataset.pick + '"][data-w="' + el.dataset.w + '"]';
     if (el.hasAttribute("data-save")) return "[data-save]";
     if (el.hasAttribute("data-share")) return "[data-share]";
+    if (el.hasAttribute("data-copy")) return '[data-copy="' + el.getAttribute("data-copy") + '"]';
     if (el.hasAttribute("data-use")) return '[data-use="' + el.getAttribute("data-use") + '"]';
     return null;
   }
@@ -434,8 +479,9 @@ section{margin-top:44px}
   }
 
   app.addEventListener("click", function (e) {
-    var t = e.target.closest("[data-day],[data-team],[data-pick],[data-save],[data-club-pick],[data-share],[data-use],[data-use-save],[data-use-cancel],[data-use-undo]");
+    var t = e.target.closest("[data-day],[data-team],[data-pick],[data-save],[data-club-pick],[data-share],[data-use],[data-use-save],[data-use-cancel],[data-use-undo],[data-copy]");
     if (!t) return;
+    if (t.hasAttribute("data-copy")) { copyCode(t.getAttribute("data-copy")); return; }
     if (t.hasAttribute("data-share")) { doShare(); return; }
     if (t.hasAttribute("data-use")) { useOpen = t.getAttribute("data-use"); draftAmt = lsGet(LS_AMT) || ""; useErr = ""; render(); focusAmt(); return; }
     if (t.hasAttribute("data-use-save")) { saveUse(t.getAttribute("data-use-save")); return; }
@@ -544,8 +590,9 @@ section{margin-top:44px}
 
   render();
   refresh();
+  loadCodes();
   setInterval(refresh, 10 * 60 * 1000);
-  document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) { refresh(); loadCodes(); } });
 })();
 </script>
 </body>
