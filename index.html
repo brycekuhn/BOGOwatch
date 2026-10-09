@@ -89,11 +89,28 @@ section{margin-top:44px}
 .tl{font:600 16px/1 var(--display);color:var(--ink-2);margin-right:4px}
 .th{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px 5px 5px;font:500 14px/1 var(--body);cursor:pointer;min-height:34px}
 .th[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
-.dot{display:inline-block;vertical-align:middle;width:22px;height:22px;min-width:22px;margin-right:8px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(127,127,127,.35)}
 .go{display:flex;flex-wrap:wrap;gap:8px;margin-top:44px}
 .go.big{margin-top:18px}
 .go .btn{display:inline-flex;align-items:center;text-decoration:none;color:var(--ink)}
 .go .btn.save{margin-top:0;color:var(--on-red)}
+.th span{line-height:1}
+.used{margin:16px 0 0;color:var(--ink-2)}
+.link{appearance:none;-webkit-appearance:none;background:none;border:0;padding:2px 0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font:inherit}
+.useform{margin-top:16px}
+.useform label{display:block;font:600 17px/1.2 var(--display);margin-bottom:6px}
+.amtrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.amtrow .save{margin-top:0}
+.cur{font:600 20px/1 var(--display);color:var(--ink-2)}
+#amt{font:500 17px/1.2 var(--body);width:7.5em;padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);min-height:40px}
+#amt:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#amt[aria-invalid="true"]{border-color:var(--red)}
+.err{color:var(--red);font-size:15px;margin:8px 0 0}
+.detail .go.big,.detail .useform,.detail .used{margin-top:12px}
+.saved{margin:0 0 12px;color:var(--ink-2)}
+.saved .big{display:block;font:700 48px/1 var(--display);color:var(--ink);margin-bottom:4px}
+.uses{list-style:none;margin:0 0 12px;padding:0;border-top:1px solid var(--line)}
+.uses li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ck{font-size:13px}
 .fine{font-size:14px;color:var(--ink-3);margin:20px 0 0;max-width:62ch}
 @media (max-width:540px){.hero{gap:16px}.lamp{font-size:46px}.why{font-size:17px}.row{grid-template-columns:96px minmax(0,1fr)}.c,.blank{min-height:52px}.c{padding:5px}.c .n{font-size:16px}.c .mk{font-size:0}.c .mk:not(:empty)::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor}}
 @media (prefers-reduced-motion:no-preference){.lamp.on.flash{animation:flash .8s ease-out 3}}
@@ -223,7 +240,10 @@ section{margin-top:44px}
     for (var s = DATA.start; s <= TODAY; s = add(s, 1)) { total++; if (status(s) === "yes") yes++; }
     var icon = lit ? "\uD83D\uDEA8" : (st === "unlogged" || st === "pre") && on.size ? "\u23F3" : "\uD83D\uDEAB";
     var h = '<div class="hero"><div class="lamp' + (lit ? " on" : "") + (lit && first ? " flash" : "") + '" aria-hidden="true">' + icon + '</div><div>';
-    h += '<h1 class="q">Firehouse BOGO today?</h1><p class="ans' + (lit ? " yes" : "") + '">' + word + '</p><p class="why">' + why + "</p>" + (lit ? linksHTML(true) : "") + "</div></div>";
+    shareMsg = (icon + " Firehouse BOGO today? " + word + ". " + why + (next ? " Next chance: " + next : "")).replace(/your teams/g, "the teams");
+    h += '<h1 class="q">Firehouse BOGO today?</h1><p class="ans' + (lit ? " yes" : "") + '">' + word + '</p><p class="why">' + why + "</p>" +
+      (lit ? linksHTML(true, true) + useHTML(TODAY) : '<div class="go big">' + shareHTML() + "</div>") +
+      (shareNote ? '<p class="note" role="status">' + esc(shareNote) + "</p>" : "") + "</div></div>";
     h += '<dl class="rows"><div class="row"><dt>Tonight</dt><dd>' + tonight + "</dd></div>";
     if (next) h += '<div class="row"><dt>Next chance</dt><dd>' + next + "</dd></div>";
     h += '<div class="row"><dt>Season so far</dt><dd>' + yes + " BOGO " + (yes === 1 ? "day" : "days") + " in " + total + " days since opening night</dd></div></dl>";
@@ -231,13 +251,19 @@ section{margin-top:44px}
   }
 
   var CLUBS = [
-    { c: "auto", n: "Auto", bg: "conic-gradient(#010101 0 25%,#F3BC52 0 50%,#FC4C02 0 75%,#00205B 0)" },
+    { c: "auto", n: "Auto", q: ["#010101", "#F3BC52", "#FC4C02", "#00205B"] },
     { c: "", n: "Firehouse", a: "#C8102E", b: "#1D4E89" },
     { c: "OTT", n: "Senators", a: "#C8102E", b: "#010101" },
     { c: "TOR", n: "Leafs", a: "#00205B", b: "#FFFFFF" },
     { c: "EDM", n: "Oilers", a: "#FC4C02", b: "#041E42" },
     { c: "CGY", n: "Flames", a: "#CE1126", b: "#F3BC52" }
   ];
+  function swatch(x) {
+    var body;
+    if (x.q) body = '<path d="M11 11V0A11 11 0 0 1 22 11Z" fill="' + x.q[0] + '"/><path d="M11 11H22A11 11 0 0 1 11 22Z" fill="' + x.q[1] + '"/><path d="M11 11V22A11 11 0 0 1 0 11Z" fill="' + x.q[2] + '"/><path d="M11 11H0A11 11 0 0 1 11 0Z" fill="' + x.q[3] + '"/>';
+    else body = '<circle cx="11" cy="11" r="11" fill="' + x.a + '"/><path d="M18.78 3.22A11 11 0 0 1 3.22 18.78Z" fill="' + x.b + '"/>';
+    return '<svg class="chip-sw" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false" style="flex:none;display:inline-block;vertical-align:middle;margin-right:8px;width:22px;height:22px">' + body + '<circle cx="11" cy="11" r="10.5" fill="none" stroke="rgba(127,127,127,.45)"/></svg>';
+  }
   var LS_CLUB = "bogo-club-v2";
   var PRIORITY = ["OTT", "CGY", "EDM", "TOR"];
   var club = lsGet(LS_CLUB);
@@ -258,10 +284,55 @@ section{margin-top:44px}
   applyClub();
   function themesHTML() {
     return '<section aria-labelledby="th-h"><h2 id="th-h">Theme</h2><p class="sub">Auto uses the colours of the team that won last night.</p><div class="themes" role="group" aria-labelledby="th-h">' + CLUBS.map(function (x) {
-      var bg = x.bg || "linear-gradient(135deg," + x.a + " 50%," + x.b + " 50%)";
-      return '<button class="th" data-club-pick="' + x.c + '" aria-pressed="' + (club === x.c) + '"' + (x.c === "auto" ? ' title="Uses the colours of the team that won last night"' : "") + '><span class="dot" aria-hidden="true" style="background:' + bg + '"></span>' + x.n + "</button>";
+      return '<button class="th" data-club-pick="' + x.c + '" aria-pressed="' + (club === x.c) + '"' + (x.c === "auto" ? ' title="Uses the colours of the team that won last night"' : "") + ">" + swatch(x) + "<span>" + x.n + "</span></button>";
     }).join("") + "</div></section>";
   }
+
+  var LS_USED = "bogo-used-v1", LS_AMT = "bogo-last-amount-v1";
+  var used = lsGet(LS_USED) || {};
+  var useOpen = null, draftAmt = "", useErr = "", shareMsg = "", shareNote = "", shareTimer = null;
+  var money = (function () {
+    try { var f = new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }); return function (n) { return f.format(n); }; }
+    catch (e) { return function (n) { return "$" + n.toFixed(2); }; }
+  })();
+  function esc(v) { return String(v).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;"); }
+  function thisOne(d) { return d === TODAY ? "today\u2019s" : "this"; }
+  function useHTML(d) {
+    if (used[d] != null) return '<p class="used">You used ' + thisOne(d) + " BOGO and saved " + money(used[d]) + '. <button class="link" data-use-undo="' + d + '">Undo</button></p>';
+    if (useOpen === d) {
+      return '<div class="useform"><label for="amt">Price of the free sub</label><div class="amtrow"><span class="cur" aria-hidden="true">$</span><input id="amt" data-amt inputmode="decimal" autocomplete="off" placeholder="0.00" value="' + esc(draftAmt) + '"' + (useErr ? ' aria-invalid="true" aria-describedby="amt-err"' : "") + '>' +
+        '<button class="btn save" data-use-save="' + d + '">Save</button><button class="btn" data-use-cancel>Cancel</button></div>' +
+        (useErr ? '<p class="err" id="amt-err" role="alert">' + useErr + "</p>" : "") + "</div>";
+    }
+    return '<div class="go big"><button class="btn" data-use="' + d + '">I used ' + thisOne(d) + " BOGO</button></div>";
+  }
+  function savingsHTML() {
+    var days = Object.keys(used).sort().reverse();
+    var h = '<section aria-labelledby="sv-h"><h2 id="sv-h">Your savings</h2>';
+    if (!days.length) return h + '<p class="sub">After you use a BOGO, tap \u201cI used today\u2019s BOGO\u201d and enter the price of the free sub. Your total is kept on this device only.</p></section>';
+    var total = days.reduce(function (t, d) { return t + used[d]; }, 0);
+    h += '<p class="saved"><span class="big">' + money(total) + "</span> saved on " + days.length + " BOGO" + (days.length > 1 ? "s" : "") + " this season</p>";
+    h += '<ul class="uses">' + days.map(function (d) { return "<li><span>" + fmt(d) + "</span><span>" + money(used[d]) + '</span><button class="link" data-use-undo="' + d + '" aria-label="Remove ' + fmt(d) + '">Remove</button></li>'; }).join("") + "</ul>";
+    return h + '<p class="sub">Kept on this device only. To add a BOGO you forgot, tap that day on the calendar.</p></section>';
+  }
+  function shareHTML() {
+    return '<button class="btn" data-share>Share</button>';
+  }
+  function doShare() {
+    var url = location.origin + location.pathname;
+    if (navigator.share) { navigator.share({ title: "Firehouse BOGO watch", text: shareMsg, url: url }).catch(function () {}); return; }
+    function note(t) { shareNote = t; render(); clearTimeout(shareTimer); shareTimer = setTimeout(function () { shareNote = ""; render(); }, 5000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(shareMsg + " " + url).then(function () { note("Copied. Paste it anywhere to share."); }, function () { note("Here\u2019s the link to share: " + url); });
+    else note("Here\u2019s the link to share: " + url);
+  }
+  function saveUse(d) {
+    var v = parseFloat(String(draftAmt).replace(/[$,\s]/g, ""));
+    if (!(v > 0 && v < 200)) { useErr = "Enter the price of the free sub, like 11.99."; render(); focusAmt(); return; }
+    used[d] = Math.round(v * 100) / 100; lsSet(LS_USED, used); lsSet(LS_AMT, String(used[d].toFixed(2)));
+    useOpen = null; useErr = ""; render();
+    var b = app.querySelector('[data-use-undo="' + d + '"]'); if (b) b.focus();
+  }
+  function focusAmt() { var i = app.querySelector("#amt"); if (i) { i.focus(); i.select(); } }
 
   var APP_IOS = "https://apps.apple.com/ca/app/firehouse-subs-canada/id1592890956";
   var APP_ANDROID = "https://play.google.com/store/apps/details?id=com.app.firehouse.ca";
@@ -272,10 +343,10 @@ section{margin-top:44px}
     if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return APP_IOS;
     return "";
   }
-  function linksHTML(big) {
+  function linksHTML(big, withShare) {
     var a = appLink();
     return '<div class="go' + (big ? " big" : "") + '">' + (a ? '<a class="btn save" href="' + a + '" target="_blank" rel="noopener">Open the Firehouse app</a>' : "") +
-      '<a class="btn" href="' + SITE + '" target="_blank" rel="noopener">Order on firehousesubs.ca</a></div>';
+      '<a class="btn" href="' + SITE + '" target="_blank" rel="noopener">Order on firehousesubs.ca</a>' + (withShare ? shareHTML() : "") + "</div>";
   }
 
   var LABEL = { yes: "BOGO day", no: "No BOGO", pre: "Opening night", possible: "BOGO possible", unlogged: "Waiting on a result", later: "No BOGO expected" };
@@ -293,7 +364,8 @@ section{margin-top:44px}
       var marks = "";
       if (s === "yes") marks = wins(p).map(function (g) { return g.w; }).join(" ");
       else if (s === "possible" || s === "unlogged") marks = night(p).filter(function (g) { return !g.w; }).map(function (g) { return on.has(g.h) ? g.h : g.a; }).join(" ");
-      h += '<button class="c ' + s + (d === TODAY ? " today" : "") + '" data-day="' + d + '" aria-pressed="' + (selected === d) + '" aria-label="' + fmt(d) + ", " + LABEL[s] + (d === TODAY ? ", today" : "") + '"><span class="n">' + label + '</span><span class="mk">' + marks + "</span></button>";
+      var u = used[d] != null && s === "yes";
+      h += '<button class="c ' + s + (d === TODAY ? " today" : "") + '" data-day="' + d + '" aria-pressed="' + (selected === d) + '" aria-label="' + fmt(d) + ", " + LABEL[s] + (u ? ", you used it" : "") + (d === TODAY ? ", today" : "") + '"><span class="n">' + label + (u ? ' <span class="ck" aria-hidden="true">\u2713</span>' : "") + '</span><span class="mk">' + marks + "</span></button>";
     }
     return h + "</div>" + detailHTML() + "</section>";
   }
@@ -303,6 +375,7 @@ section{margin-top:44px}
     if (s === "pre") body = "<p>Nothing to redeem yet. The first chance came the next day.</p>";
     else if (!ng.length) body = "<p>None of your teams " + (p < TODAY ? "played " : "play ") + longDay(p) + (p > DATA.scheduleEnd ? ". That part of the schedule isn\u2019t loaded yet." : ".") + "</p>";
     else body = "<p>" + longDay(p) + "\u2019s games:</p><ul>" + ng.map(function (g) { return "<li>" + preview(g) + (!g.w && g.d < TODAY ? ", result not logged" : "") + "</li>"; }).join("") + "</ul>";
+    if (s === "yes" && D < TODAY) body += useHTML(D);
     return '<div class="detail" aria-live="polite"><h3>' + fmt(D) + ": " + LABEL[s] + "</h3>" + body + "</div>";
   }
 
@@ -348,19 +421,26 @@ section{margin-top:44px}
     if (el.hasAttribute("data-club-pick")) return '[data-club-pick="' + el.getAttribute("data-club-pick") + '"]';
     if (el.dataset.pick) return '[data-pick="' + el.dataset.pick + '"][data-w="' + el.dataset.w + '"]';
     if (el.hasAttribute("data-save")) return "[data-save]";
+    if (el.hasAttribute("data-share")) return "[data-share]";
+    if (el.hasAttribute("data-use")) return '[data-use="' + el.getAttribute("data-use") + '"]';
     return null;
   }
   function render() {
     var k = keyOf(document.activeElement);
     applyClub();
-    app.innerHTML = heroHTML() + calHTML() + logHTML() + teamsHTML() + themesHTML() + footHTML();
+    app.innerHTML = heroHTML() + calHTML() + logHTML() + savingsHTML() + teamsHTML() + themesHTML() + footHTML();
     if (k) { var el = app.querySelector(k); if (el) el.focus(); }
     first = false;
   }
 
   app.addEventListener("click", function (e) {
-    var t = e.target.closest("[data-day],[data-team],[data-pick],[data-save],[data-club-pick]");
+    var t = e.target.closest("[data-day],[data-team],[data-pick],[data-save],[data-club-pick],[data-share],[data-use],[data-use-save],[data-use-cancel],[data-use-undo]");
     if (!t) return;
+    if (t.hasAttribute("data-share")) { doShare(); return; }
+    if (t.hasAttribute("data-use")) { useOpen = t.getAttribute("data-use"); draftAmt = lsGet(LS_AMT) || ""; useErr = ""; render(); focusAmt(); return; }
+    if (t.hasAttribute("data-use-save")) { saveUse(t.getAttribute("data-use-save")); return; }
+    if (t.hasAttribute("data-use-cancel")) { var was = useOpen; useOpen = null; useErr = ""; render(); var ub = app.querySelector('[data-use="' + was + '"]'); if (ub) ub.focus(); return; }
+    if (t.hasAttribute("data-use-undo")) { delete used[t.getAttribute("data-use-undo")]; lsSet(LS_USED, used); render(); return; }
     if (t.hasAttribute("data-club-pick")) { club = t.getAttribute("data-club-pick"); lsSet(LS_CLUB, club); applyClub(); render(); return; }
     if (t.dataset.day) { selected = selected === t.dataset.day ? null : t.dataset.day; render(); return; }
     if (t.dataset.team) {
@@ -374,6 +454,16 @@ section{margin-top:44px}
       msg = ""; render(); return;
     }
     if (t.hasAttribute("data-save")) save();
+  });
+
+  app.addEventListener("input", function (e) {
+    if (!e.target.hasAttribute || !e.target.hasAttribute("data-amt")) return;
+    draftAmt = e.target.value;
+    if (useErr) { useErr = ""; e.target.removeAttribute("aria-invalid"); var er = app.querySelector("#amt-err"); if (er) er.remove(); }
+  });
+  app.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target.hasAttribute && e.target.hasAttribute("data-amt") && useOpen) { e.preventDefault(); saveUse(useOpen); }
+    if (e.key === "Escape" && useOpen) { useOpen = null; useErr = ""; render(); }
   });
 
   var artP = (window.claude && typeof window.claude.use === "function")
