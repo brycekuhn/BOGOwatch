@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Firehouse BOGO watch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style id="css">
+:root{--bg:#EDF2F6;--surface:#FFFFFF;--ink:#0D1B2A;--ink-2:#46566A;--ink-3:#6E7E91;--line:#D3DCE5;--red:#C8102E;--on-red:#FFFFFF;--red-soft:#F7D7DC;--amber:#7A4F00;--amber-soft:#FFEDBF;--blue:#1D4E89;--lamp:#C3CDD7;--display:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;--body:"Barlow","Segoe UI",system-ui,-apple-system,sans-serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A141E;--surface:#112030;--ink:#E7EEF4;--ink-2:#A9B7C5;--ink-3:#8494A4;--line:#22354A;--red:#E0334A;--on-red:#FFFFFF;--red-soft:#3B1820;--amber:#F3C452;--amber-soft:#3A2D0E;--blue:#7AA9E3;--lamp:#2A394A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A141E;--surface:#112030;--ink:#E7EEF4;--ink-2:#A9B7C5;--ink-3:#8494A4;--line:#22354A;--red:#E0334A;--on-red:#FFFFFF;--red-soft:#3B1820;--amber:#F3C452;--amber-soft:#3A2D0E;--blue:#7AA9E3;--lamp:#2A394A;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);-webkit-text-size-adjust:100%}
+main{max-width:760px;margin:0 auto;padding:28px 20px 56px}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+h2{font:600 24px/1.15 var(--display);margin:0 0 4px}
+h3{font:600 19px/1.2 var(--display);margin:0 0 6px}
+section{margin-top:44px}
+.sub{color:var(--ink-2);margin:0 0 16px;max-width:62ch}
+.hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start}
+.lamp{width:68px;height:68px;border-radius:50%;background:var(--lamp);margin-top:8px}
+.lamp.on{background:var(--red);box-shadow:0 0 0 10px var(--red-soft)}
+.q{font:500 19px/1.2 var(--display);color:var(--ink-2);margin:0}
+.ans{font:700 clamp(68px,17vw,116px)/.86 var(--display);margin:4px 0 12px}
+.ans.yes{color:var(--red)}
+.why{font-size:19px;line-height:1.45;margin:0;max-width:46ch}
+.rows{margin:26px 0 0;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row dt{font:600 17px/1.45 var(--display);color:var(--ink-2)}
+.row dd{margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--ink-2);margin:0 0 12px;padding:0;list-style:none}
+.legend li{display:flex;align-items:center;gap:6px}
+.sw-k{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid var(--line);background:var(--surface)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wd{font:500 14px/1 var(--display);color:var(--ink-3);text-align:center;padding:0 0 6px}
+.blank{min-height:66px}
+.c{appearance:none;border:1px solid transparent;background:var(--surface);border-radius:6px;min-height:66px;padding:6px 7px;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;gap:4px}
+.c .n{font:600 18px/1 var(--display)}
+.c .mk{font:500 13px/1.15 var(--display);letter-spacing:.02em}
+.c.yes{background:var(--red);color:var(--on-red)}
+.c.no,.c.pre{color:var(--ink-3)}
+.c.possible{background:transparent;border:1px dashed var(--ink-3);color:var(--ink-2)}
+.c.unlogged{background:var(--amber-soft);color:var(--amber)}
+.c.later{background:transparent;color:var(--ink-3)}
+.c.today{outline:2px solid var(--blue);outline-offset:1px}
+.c[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
+.c.yes[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--on-red)}
+.hint{color:var(--ink-3);font-size:15px;margin:12px 0 0}
+.detail{margin-top:12px;background:var(--surface);border-radius:10px;padding:14px 16px}
+.detail p{margin:0}
+.detail ul{margin:6px 0 0;padding-left:20px}
+.log{display:flex;flex-direction:column;gap:8px}
+.lg{background:var(--surface);border-radius:10px;padding:12px 14px}
+.lg p{margin:0 0 10px}
+.when{font:600 17px/1 var(--display);margin-right:6px}
+.ch{display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;font:500 15px/1.2 var(--body);padding:9px 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);cursor:pointer;min-height:40px}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.save{margin-top:12px;background:var(--red);color:var(--on-red);border-color:var(--red)}
+.note{color:var(--ink-2);margin:12px 0 0}
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.tm{appearance:none;display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-align:left;cursor:pointer;width:100%}
+.sw{width:38px;height:22px;border-radius:11px;background:var(--lamp);position:relative;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#FFFFFF;transition:transform .15s ease-out}
+.tm[aria-checked="true"] .sw{background:var(--red)}
+.tm[aria-checked="true"] .sw::after{transform:translateX(16px)}
+.tn{display:block;font:600 19px/1.1 var(--display)}
+.tr{display:block;font-size:14px;color:var(--ink-2)}
+.fine{font-size:14px;color:var(--ink-3);margin:44px 0 0;max-width:62ch}
+@media (max-width:540px){.hero{gap:16px}.lamp{width:48px;height:48px}.lamp.on{box-shadow:0 0 0 7px var(--red-soft)}.why{font-size:17px}.row{grid-template-columns:96px minmax(0,1fr)}.c,.blank{min-height:52px}.c{padding:5px}.c .n{font-size:16px}.c .mk{font-size:0}.c .mk:not(:empty)::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor}}
+@media (prefers-reduced-motion:no-preference){.lamp.on.flash{animation:flash .8s ease-out 2}}
+@keyframes flash{0%,100%{opacity:1}45%{opacity:.3}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script type="application/json" id="data">{"updated":"2026-10-09","start":"2026-09-29","scheduleEnd":"2026-11-09","games":[["2026-09-29","7:00 PM","MTL","TOR",3,2],["2026-09-29","10:00 PM","VAN","EDM",6,5],["2026-09-30","7:30 PM","NYI","TOR",1,2],["2026-10-01","9:00 PM","SEA","CGY",6,1],["2026-10-01","10:00 PM","EDM","VAN",9,7],["2026-10-02","8:00 PM","BOS","WPG",4,3],["2026-10-03","7:00 PM","OTT","TOR",3,2],["2026-10-03","7:00 PM","SEA","EDM",1,3],["2026-10-03","7:00 PM","MTL","PIT",5,6],["2026-10-03","10:00 PM","CGY","VAN",1,4],["2026-10-04","1:00 PM","WPG","DET",3,2],["2026-10-04","8:00 PM","CGY","SEA",1,6],["2026-10-04","9:00 PM","VGK","VAN",3,2],["2026-10-05","7:30 PM","OTT","BOS",4,1],["2026-10-05","7:30 PM","WPG","PIT",3,2],["2026-10-06","7:00 PM","OTT","DET",3,5],["2026-10-06","7:00 PM","NSH","TOR",4,5],["2026-10-06","7:00 PM","CAR","MTL",6,4],["2026-10-07","7:30 PM","COL","WPG",2,3],["2026-10-07","10:00 PM","EDM","ANA",5,2],["2026-10-08","7:00 PM","PHI","OTT",1,2],["2026-10-08","7:00 PM","NSH","MTL",5,2],["2026-10-08","7:00 PM","VAN","CAR",2,7],["2026-10-08","9:00 PM","COL","CGY",7,3],["2026-10-08","10:00 PM","TOR","VGK",3,4],["2026-10-09","8:00 PM","ANA","WPG",null,null],["2026-10-10","3:30 PM","VAN","NJ",null,null],["2026-10-10","4:00 PM","EDM","SJ",null,null],["2026-10-10","7:00 PM","NSH","OTT",null,null],["2026-10-10","7:00 PM","DET","MTL",null,null],["2026-10-10","7:00 PM","TOR","COL",null,null],["2026-10-10","10:00 PM","ANA","CGY",null,null],["2026-10-11","6:00 PM","VAN","NYR",null,null],["2026-10-12","7:00 PM","OTT","NJ",null,null],["2026-10-13","6:30 PM","BUF","MTL",null,null],["2026-10-13","7:30 PM","STL","OTT",null,null],["2026-10-13","7:45 PM","VAN","NYI",null,null],["2026-10-13","8:15 PM","MIN","WPG",null,null],["2026-10-13","9:00 PM","TOR","UTA",null,null],["2026-10-13","9:45 PM","CGY","ANA",null,null],["2026-10-13","10:30 PM","EDM","LA",null,null],["2026-10-14","7:30 PM","MTL","WSH",null,null],["2026-10-15","7:00 PM","NYI","OTT",null,null],["2026-10-15","7:00 PM","BUF","TOR",null,null],["2026-10-15","7:00 PM","VAN","FLA",null,null],["2026-10-15","8:00 PM","WPG","CHI",null,null],["2026-10-15","9:00 PM","UTA","EDM",null,null],["2026-10-15","10:00 PM","CGY","VGK",null,null],["2026-10-17","3:30 PM","CAR","WPG",null,null],["2026-10-17","4:00 PM","VAN","TB",null,null],["2026-10-17","7:00 PM","OTT","PHI",null,null],["2026-10-17","7:00 PM","NYI","TOR",null,null],["2026-10-17","7:00 PM","BUF","MTL",null,null],["2026-10-17","10:00 PM","EDM","UTA",null,null],["2026-10-18","8:00 PM","CAR","CGY",null,null],["2026-10-19","7:30 PM","SJ","TOR",null,null],["2026-10-20","7:00 PM","TOR","CBJ",null,null],["2026-10-20","7:00 PM","SJ","MTL",null,null],["2026-10-20","8:00 PM","WPG","STL",null,null],["2026-10-20","9:00 PM","MIN","EDM",null,null],["2026-10-20","10:00 PM","CAR","VAN",null,null],["2026-10-21","7:30 PM","FLA","OTT",null,null],["2026-10-22","7:00 PM","SJ","OTT",null,null],["2026-10-22","7:00 PM","NYR","TOR",null,null],["2026-10-22","8:00 PM","WPG","DAL",null,null],["2026-10-22","9:00 PM","CAR","EDM",null,null],["2026-10-22","9:00 PM","MIN","CGY",null,null],["2026-10-22","10:00 PM","DET","VAN",null,null],["2026-10-23","8:00 PM","MTL","CHI",null,null],["2026-10-24","7:00 PM","NYR","OTT",null,null],["2026-10-24","7:00 PM","TOR","EDM",null,null],["2026-10-24","10:00 PM","DET","CGY",null,null],["2026-10-25","7:00 PM","MTL","WPG",null,null],["2026-10-25","10:00 PM","MIN","VAN",null,null],["2026-10-26","8:30 PM","TOR","CGY",null,null],["2026-10-26","9:30 PM","DET","EDM",null,null],["2026-10-27","8:00 PM","FLA","WPG",null,null],["2026-10-27","8:00 PM","MTL","STL",null,null],["2026-10-27","10:00 PM","OTT","VGK",null,null],["2026-10-27","10:00 PM","VAN","ANA",null,null],["2026-10-28","8:30 PM","CGY","EDM",null,null],["2026-10-28","10:00 PM","TOR","SEA",null,null],["2026-10-29","7:00 PM","WPG","TB",null,null],["2026-10-29","8:00 PM","MTL","DAL",null,null],["2026-10-29","10:00 PM","OTT","LA",null,null],["2026-10-29","10:00 PM","VAN","SJ",null,null],["2026-10-30","7:00 PM","WPG","FLA",null,null],["2026-10-30","8:00 PM","SEA","CGY",null,null],["2026-10-31","2:00 PM","EDM","NYI",null,null],["2026-10-31","4:00 PM","OTT","SJ",null,null],["2026-10-31","7:00 PM","TOR","VAN",null,null],["2026-10-31","7:00 PM","PIT","MTL",null,null],["2026-10-31","10:00 PM","CGY","COL",null,null],["2026-11-01","1:00 PM","WPG","CAR",null,null],["2026-11-01","6:00 PM","EDM","NYR",null,null],["2026-11-01","8:00 PM","OTT","ANA",null,null],["2026-11-02","9:00 PM","CGY","SJ",null,null],["2026-11-03","7:00 PM","UTA","TOR",null,null],["2026-11-03","7:00 PM","WPG","MTL",null,null],["2026-11-03","7:30 PM","EDM","NJ",null,null],["2026-11-03","9:00 PM","ANA","VAN",null,null],["2026-11-04","7:30 PM","OTT","BUF",null,null],["2026-11-04","10:00 PM","CGY","SEA",null,null],["2026-11-05","7:00 PM","VAN","WPG",null,null],["2026-11-05","7:00 PM","UTA","MTL",null,null],["2026-11-05","8:00 PM","ANA","EDM",null,null],["2026-11-06","8:00 PM","ANA","CGY",null,null],["2026-11-07","7:00 PM","UTA","OTT",null,null],["2026-11-07","7:00 PM","MTL","TOR",null,null],["2026-11-07","10:00 PM","VAN","EDM",null,null],["2026-11-08","6:00 PM","TB","WPG",null,null],["2026-11-08","7:00 PM","NJ","TOR",null,null],["2026-11-08","7:00 PM","PHI","CGY",null,null],["2026-11-09","8:00 PM","NYR","EDM",null,null],["2026-11-09","9:30 PM","PHI","VAN",null,null]]}</script>
+<script id="logic">
+(function () {
+  "use strict";
+  var HEAD = '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<title>Firehouse BOGO watch</title>\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">\n';
+  var DATA = JSON.parse(document.getElementById("data").textContent);
+  var TEAMS = { OTT: "Senators", TOR: "Leafs", EDM: "Oilers", CGY: "Flames", VAN: "Canucks", WPG: "Jets", MTL: "Canadiens" };
+  var ORDER = ["OTT", "TOR", "EDM", "CGY", "VAN", "WPG", "MTL"];
+  var DEFAULT_ON = ["OTT", "TOR", "EDM", "CGY"];
+  var NOTES = { VAN: "Firehouse partner, not confirmed", WPG: "Not confirmed", MTL: "Not confirmed" };
+  var OPP = { NYI: "Islanders", SEA: "Kraken", BOS: "Bruins", NSH: "Predators", ANA: "Ducks", PHI: "Flyers", DET: "Red Wings", PIT: "Penguins", CAR: "Hurricanes", VGK: "Golden Knights", COL: "Avalanche", NJ: "Devils", NYR: "Rangers", SJ: "Sharks", LA: "Kings", UTA: "Mammoth", STL: "Blues", BUF: "Sabres", FLA: "Panthers", TB: "Lightning", TBL: "Lightning", NJD: "Devils", SJS: "Sharks", LAK: "Kings", MIN: "Wild", CBJ: "Blue Jackets", DAL: "Stars", CHI: "Blackhawks", WSH: "Capitals" };
+  var WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var WDL = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var MO = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var LS_TEAMS = "bogo-teams-v1", LS_RES = "bogo-results-v1";
+
+  function lsGet(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function todayIso() { var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function toDate(s) { var p = s.split("-"); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); }
+  function add(s, n) { var d = toDate(s); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+  function dow(s) { return toDate(s).getUTCDay(); }
+  function fmt(s) { var d = toDate(s); return WD[d.getUTCDay()] + " " + MO[d.getUTCMonth()] + " " + d.getUTCDate(); }
+  function longDay(s) { return WDL[dow(s)]; }
+  function name(ab) { return TEAMS[ab] || OPP[ab] || ab; }
+  function joinList(a) { if (a.length < 2) return a.join(""); if (a.length === 2) return a[0] + " and " + a[1]; return a.slice(0, -1).join(", ") + ", and " + a[a.length - 1]; }
+
+  var TODAY = todayIso();
+  var live = false;
+  var games = buildGames();
+  function buildGames() {
+  var overlay = lsGet(LS_RES) || {};
+  var overlayChanged = false;
+  var list = DATA.games.map(function (r) {
+    var id = r[0] + "-" + r[2] + "-" + r[3];
+    var as = r[4] == null ? null : r[4], hs = r[5] == null ? null : r[5];
+    var w = r[6] || null;
+    if (as != null && hs != null) w = as > hs ? r[2] : r[3];
+    if (w && overlay[id]) { delete overlay[id]; overlayChanged = true; }
+    if (!w && overlay[id]) w = overlay[id];
+    return { id: id, d: r[0], t: r[1], a: r[2], h: r[3], as: as, hs: hs, w: w };
+  });
+  if (overlayChanged) lsSet(LS_RES, overlay);
+  return list;
+  }
+
+  var stored = lsGet(LS_TEAMS);
+  var on = new Set((Array.isArray(stored) ? stored : DEFAULT_ON).filter(function (t) { return TEAMS[t]; }));
+  var pending = {};
+  var selected = null;
+  var msg = "";
+  var saving = false;
+  var readOnly = false;
+  var first = true;
+
+  function mine(g) { return on.has(g.a) || on.has(g.h); }
+  function night(d) { return games.filter(function (g) { return g.d === d && mine(g); }); }
+  function wins(d) { return night(d).filter(function (g) { return g.w && on.has(g.w); }); }
+  function status(D) {
+    var p = add(D, -1);
+    if (p < DATA.start) return "pre";
+    if (wins(p).length) return "yes";
+    var u = night(p).filter(function (g) { return !g.w; });
+    if (u.length) return p < TODAY ? "unlogged" : "possible";
+    return D > TODAY ? "later" : "no";
+  }
+  function score(g, W) {
+    if (g.as == null) return "";
+    var ws = W === g.a ? g.as : g.hs, ls = W === g.a ? g.hs : g.as;
+    return " " + ws + "\u2013" + ls;
+  }
+  function line(g) {
+    if (!g.w) return name(g.a) + " at " + name(g.h);
+    var W = g.w, L = W === g.a ? g.h : g.a;
+    if (on.has(W)) return name(W) + " beat the " + name(L) + score(g, W);
+    return name(L) + " lost" + score(g, W) + " to the " + name(W);
+  }
+  function preview(g) {
+    if (g.w) return line(g);
+    var T = on.has(g.h) ? g.h : g.a, O = T === g.h ? g.a : g.h;
+    return name(T) + " " + (T === g.h ? "host" : "visit") + " the " + name(O) + " at " + g.t + " ET";
+  }
+  function rec(t) {
+    var w = 0, l = 0;
+    games.forEach(function (g) { if (!g.w || (g.a !== t && g.h !== t)) return; if (g.w === t) w++; else l++; });
+    return w + "\u2013" + l;
+  }
+
+  function heroHTML() {
+    var prev = add(TODAY, -1), st = status(TODAY), word = "No", why, lit = false;
+    if (!on.size) { why = "Turn on at least one team below."; }
+    else if (st === "pre") { word = "Not yet"; why = "The first chance comes the day after one of your teams wins."; }
+    else if (st === "yes") { word = "Yes"; lit = true; why = joinList(wins(prev).map(line)) + " last night."; }
+    else if (st === "unlogged") {
+      word = "Maybe";
+      var u = night(prev).filter(function (g) { return !g.w; });
+      why = "Last night\u2019s " + (u.length > 1 ? "results aren\u2019t" : "result isn\u2019t") + (live ? " in yet: " : " logged yet: ") + joinList(u.map(line)) + (live ? ". Scores refresh about every 30 minutes." : ". Tap the winner below.");
+    } else {
+      var ng = night(prev);
+      why = ng.length ? joinList(ng.map(line)) + " last night." : "None of your teams played last night.";
+    }
+    var tg = night(TODAY), tonight, showNext = true;
+    if (!tg.length) tonight = "None of your teams play tonight, so there\u2019s no BOGO tomorrow.";
+    else {
+      var open = tg.some(function (g) { return !g.w; });
+      var won = tg.some(function (g) { return g.w && on.has(g.w); });
+      tonight = joinList(tg.map(preview)) + ". " + (open ? "A win means a BOGO tomorrow." : won ? "That\u2019s a BOGO tomorrow." : "No BOGO tomorrow.");
+      showNext = !open && !won;
+    }
+    var next = "";
+    if (showNext && on.size) {
+      var nd = null;
+      for (var d = add(TODAY, 1); d <= DATA.scheduleEnd; d = add(d, 1)) { if (night(d).length) { nd = d; break; } }
+      if (nd) { var n = night(nd).length; next = fmt(add(nd, 1)) + ", if one of your teams wins " + longDay(nd) + " (" + n + (n > 1 ? " games)." : " game)."); }
+      else next = live ? "No more regular-season games on the schedule." : "The schedule here ends " + fmt(DATA.scheduleEnd) + ". Ask Claude to load more games.";
+    }
+    var yes = 0, total = 0;
+    for (var s = DATA.start; s <= TODAY; s = add(s, 1)) { total++; if (status(s) === "yes") yes++; }
+    var h = '<div class="hero"><div class="lamp' + (lit ? " on" : "") + (lit && first ? " flash" : "") + '" aria-hidden="true"></div><div>';
+    h += '<h1 class="q">Firehouse BOGO today?</h1><p class="ans' + (lit ? " yes" : "") + '">' + word + '</p><p class="why">' + why + "</p></div></div>";
+    h += '<dl class="rows"><div class="row"><dt>Tonight</dt><dd>' + tonight + "</dd></div>";
+    if (next) h += '<div class="row"><dt>Next chance</dt><dd>' + next + "</dd></div>";
+    h += '<div class="row"><dt>Season so far</dt><dd>' + yes + " BOGO " + (yes === 1 ? "day" : "days") + " in " + total + " days since opening night</dd></div></dl>";
+    return h;
+  }
+
+  var LABEL = { yes: "BOGO day", no: "No BOGO", pre: "Opening night", possible: "BOGO possible", unlogged: "Waiting on a result", later: "No BOGO expected" };
+  function calHTML() {
+    var h = '<section aria-labelledby="cal-h"><h2 id="cal-h">Season so far</h2><p class="sub">Each day shows whether the BOGO was good that day, based on the night before.</p>';
+    h += '<ul class="legend"><li><span class="sw-k" style="background:var(--red);border-color:var(--red)"></span>BOGO day</li><li><span class="sw-k"></span>No BOGO</li><li><span class="sw-k" style="background:transparent;border:1px dashed var(--ink-3)"></span>Possible</li><li><span class="sw-k" style="background:var(--amber-soft);border-color:var(--amber-soft)"></span>Needs a result</li><li><span class="sw-k" style="outline:2px solid var(--blue);outline-offset:1px"></span>Today</li></ul>';
+    h += '<div class="cal">' + WD.map(function (w) { return '<div class="wd" aria-hidden="true">' + w + "</div>"; }).join("");
+    var lastGame = DATA.games[DATA.games.length - 1][0];
+    var end = add(lastGame, 1) > TODAY ? add(lastGame, 1) : TODAY;
+    var from = add(DATA.start, -dow(DATA.start)), to = add(end, 6 - dow(end));
+    for (var d = from; d <= to; d = add(d, 1)) {
+      if (d < DATA.start) { h += '<div class="blank"></div>'; continue; }
+      var s = status(d), dn = toDate(d).getUTCDate(), p = add(d, -1);
+      var label = (dn === 1 || d === DATA.start ? MO[toDate(d).getUTCMonth()] + " " : "") + dn;
+      var marks = "";
+      if (s === "yes") marks = wins(p).map(function (g) { return g.w; }).join(" ");
+      else if (s === "possible" || s === "unlogged") marks = night(p).filter(function (g) { return !g.w; }).map(function (g) { return on.has(g.h) ? g.h : g.a; }).join(" ");
+      h += '<button class="c ' + s + (d === TODAY ? " today" : "") + '" data-day="' + d + '" aria-pressed="' + (selected === d) + '" aria-label="' + fmt(d) + ", " + LABEL[s] + (d === TODAY ? ", today" : "") + '"><span class="n">' + label + '</span><span class="mk">' + marks + "</span></button>";
+    }
+    return h + "</div>" + detailHTML() + "</section>";
+  }
+  function detailHTML() {
+    if (!selected) return '<p class="hint">Tap a day to see the games behind it.</p>';
+    var D = selected, p = add(D, -1), s = status(D), ng = night(p), body;
+    if (s === "pre") body = "<p>Nothing to redeem yet. The first chance came the next day.</p>";
+    else if (!ng.length) body = "<p>None of your teams " + (p < TODAY ? "played " : "play ") + longDay(p) + (p > DATA.scheduleEnd ? ". That part of the schedule isn\u2019t loaded yet." : ".") + "</p>";
+    else body = "<p>" + longDay(p) + "\u2019s games:</p><ul>" + ng.map(function (g) { return "<li>" + preview(g) + (!g.w && g.d < TODAY ? ", result not logged" : "") + "</li>"; }).join("") + "</ul>";
+    return '<div class="detail" aria-live="polite"><h3>' + fmt(D) + ": " + LABEL[s] + "</h3>" + body + "</div>";
+  }
+
+  function logHTML() {
+    var todo = games.filter(function (g) { return !g.w && (live ? g.d < TODAY : g.d <= TODAY) && mine(g); });
+    if (live && !todo.length && !msg) return "";
+    var h = '<section aria-labelledby="log-h"><h2 id="log-h">' + (live ? "Missing results" : "Log results") + "</h2>";
+    if (!todo.length) h += '<p class="sub">Nothing to log right now. After your teams play, tap the winner here and the calendar updates.</p>';
+    else {
+      h += '<p class="sub">' + (live ? "The automatic update hasn\u2019t picked these up yet. If you know who won, tap them to see your BOGO now." : "Tap who won. Overtime and shootout wins count.") + '</p><div class="log">';
+      todo.forEach(function (g) {
+        h += '<div class="lg"><p><span class="when">' + (g.d === TODAY ? "Tonight" : fmt(g.d)) + "</span>" + name(g.a) + " at " + name(g.h) + '</p><div class="ch">';
+        [g.a, g.h].forEach(function (t) { h += '<button class="btn" data-pick="' + g.id + '" data-w="' + t + '" aria-pressed="' + (pending[g.id] === t) + '">' + name(t) + " won</button>"; });
+        h += "</div></div>";
+      });
+      h += "</div>";
+      var n = Object.keys(pending).length;
+      if (n) h += '<button class="btn save" data-save>' + (saving ? "Saving\u2026" : "Save " + n + (n > 1 ? " results" : " result")) + "</button>";
+    }
+    if (msg) h += '<p class="note" role="status">' + msg + "</p>";
+    return h + "</section>";
+  }
+
+  function teamsHTML() {
+    var h = '<section aria-labelledby="tm-h"><h2 id="tm-h">Teams that count</h2><p class="sub">Senators, Leafs, Oilers and Flames are on by default. Turn on another team if the Firehouse app shows the offer after one of its wins.</p><div class="teams">';
+    ORDER.forEach(function (t) {
+      h += '<button class="tm" role="switch" aria-checked="' + on.has(t) + '" data-team="' + t + '"><span class="sw" aria-hidden="true"></span><span><span class="tn">' + TEAMS[t] + '</span><span class="tr">' + rec(t) + " so far</span>" + (NOTES[t] ? '<span class="tr">' + NOTES[t] + "</span>" : "") + "</span></button>";
+    });
+    return h + "</div></section>";
+  }
+
+  function footHTML() {
+    var when = "";
+    if (live && DATA.updatedAt) { var u = new Date(DATA.updatedAt); when = " Last new result came in " + fmt(u.getFullYear() + "-" + pad(u.getMonth() + 1) + "-" + pad(u.getDate())) + " at " + u.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) + "."; }
+    return '<p class="fine">' + (live ? "Scores update automatically about every 30 minutes on game nights." + when : "Scores through " + fmt(add(DATA.updated, -1)) + ", schedule through " + fmt(DATA.scheduleEnd) + ".") + " Assumes the BOGO is good the day after a win, overtime and shootout wins included. Game times are Eastern. Check the Offers tab in the Firehouse Subs app before you order.</p>";
+  }
+
+  var app = document.getElementById("app");
+  function keyOf(el) {
+    if (!el || !app.contains(el) || !el.dataset) return null;
+    if (el.dataset.day) return '[data-day="' + el.dataset.day + '"]';
+    if (el.dataset.team) return '[data-team="' + el.dataset.team + '"]';
+    if (el.dataset.pick) return '[data-pick="' + el.dataset.pick + '"][data-w="' + el.dataset.w + '"]';
+    if (el.hasAttribute("data-save")) return "[data-save]";
+    return null;
+  }
+  function render() {
+    var k = keyOf(document.activeElement);
+    app.innerHTML = heroHTML() + calHTML() + logHTML() + teamsHTML() + footHTML();
+    if (k) { var el = app.querySelector(k); if (el) el.focus(); }
+    first = false;
+  }
+
+  app.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-day],[data-team],[data-pick],[data-save]");
+    if (!t) return;
+    if (t.dataset.day) { selected = selected === t.dataset.day ? null : t.dataset.day; render(); return; }
+    if (t.dataset.team) {
+      var tm = t.dataset.team;
+      if (on.has(tm)) on.delete(tm); else on.add(tm);
+      lsSet(LS_TEAMS, Array.from(on));
+      render(); return;
+    }
+    if (t.dataset.pick) {
+      if (pending[t.dataset.pick] === t.dataset.w) delete pending[t.dataset.pick]; else pending[t.dataset.pick] = t.dataset.w;
+      msg = ""; render(); return;
+    }
+    if (t.hasAttribute("data-save")) save();
+  });
+
+  var artP = (window.claude && typeof window.claude.use === "function")
+    ? Promise.resolve(window.claude.use("artifact")).catch(function () { return null; })
+    : Promise.resolve(null);
+
+  function buildDoc() {
+    var data = {
+      updated: DATA.updated, start: DATA.start, scheduleEnd: DATA.scheduleEnd,
+      games: games.map(function (g) {
+        var r = [g.d, g.t, g.a, g.h, g.as, g.hs];
+        if (g.w && g.as == null) r.push(g.w);
+        return r;
+      })
+    };
+    var json = JSON.stringify(data).replace(/</g, "\\u003c");
+    var css = document.getElementById("css").textContent;
+    var js = document.getElementById("logic").textContent;
+    return "<!doctype html>\n<html lang=\"en\">\n<head>\n" + HEAD + '<style id="css">' + css + "</style>\n</head>\n<body>\n<main id=\"app\"></main>\n" +
+      '<script type="application/json" id="data">' + json + "<\/script>\n" +
+      '<script id="logic">' + js + "<\/script>\n</body>\n</html>\n";
+  }
+
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  async function tryPublish(art) {
+    for (var i = 0; i < 2; i++) {
+      try { await art.publish(buildDoc()); return "ok"; }
+      catch (e) {
+        var c = e && e.code;
+        if (c === "conflict") return "conflict";
+        if (["not_writer", "not_granted", "not_declared", "consent_required", "capability_disabled", "capability_removed"].indexOf(c) > -1) return "readonly";
+        if (c === "upstream_error" && i === 0) { await wait(700 + Math.random() * 900); continue; }
+        return "error";
+      }
+    }
+    return "error";
+  }
+
+  async function save() {
+    var ids = Object.keys(pending);
+    if (!ids.length || saving) return;
+    saving = true;
+    var ov = lsGet(LS_RES) || {};
+    ids.forEach(function (id) {
+      var g = games.find(function (x) { return x.id === id; });
+      if (g && !g.w) { g.w = pending[id]; ov[id] = pending[id]; }
+    });
+    lsSet(LS_RES, ov);
+    msg = "Saving\u2026"; render();
+    pending = {};
+    var art = readOnly ? null : await artP;
+    if (!art) { saving = false; msg = "Saved on this device."; render(); return; }
+    var res = await tryPublish(art);
+    saving = false;
+    if (res === "ok") msg = "Saved.";
+    else if (res === "conflict") msg = "A newer version was saved somewhere else. Loading it now, and your results stay on this device.";
+    else if (res === "readonly") { readOnly = true; msg = "This copy is read-only, so your results are saved on this device."; }
+    else msg = "Couldn\u2019t update the shared page, so your results are saved on this device.";
+    render();
+  }
+
+  function refresh() {
+    if (!window.fetch) return;
+    fetch("data.json", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !Array.isArray(d.games) || !d.games.length) return;
+        var changed = !live || d.updatedAt !== DATA.updatedAt || todayIso() !== TODAY;
+        DATA = d; live = true; TODAY = todayIso();
+        if (changed) { games = buildGames(); render(); }
+      })
+      .catch(function () {});
+  }
+
+  render();
+  refresh();
+  setInterval(refresh, 10 * 60 * 1000);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
+})();
+</script>
+</body>
+</html>
