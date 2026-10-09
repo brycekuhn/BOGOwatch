@@ -8,12 +8,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style id="css">
-:root{--bg:#EDF2F6;--surface:#FFFFFF;--ink:#0D1B2A;--ink-2:#46566A;--ink-3:#6E7E91;--line:#D3DCE5;--red:#C8102E;--on-red:#FFFFFF;--red-soft:#F7D7DC;--amber:#7A4F00;--amber-soft:#FFEDBF;--blue:#1D4E89;--lamp:#C3CDD7;--display:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;--body:"Barlow","Segoe UI",system-ui,-apple-system,sans-serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A141E;--surface:#112030;--ink:#E7EEF4;--ink-2:#A9B7C5;--ink-3:#8494A4;--line:#22354A;--red:#E0334A;--on-red:#FFFFFF;--red-soft:#3B1820;--amber:#F3C452;--amber-soft:#3A2D0E;--blue:#7AA9E3;--lamp:#2A394A;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0A141E;--surface:#112030;--ink:#E7EEF4;--ink-2:#A9B7C5;--ink-3:#8494A4;--line:#22354A;--red:#E0334A;--on-red:#FFFFFF;--red-soft:#3B1820;--amber:#F3C452;--amber-soft:#3A2D0E;--blue:#7AA9E3;--lamp:#2A394A;color-scheme:dark}
+:root{--bg:#EDF2F6;--surface:#FFFFFF;--ink:#0D1B2A;--ink-2:#46566A;--ink-3:#6E7E91;--line:#D3DCE5;--red:#C8102E;--on-red:#FFFFFF;--red-soft:#F7D7DC;--amber:#7A4F00;--amber-soft:#FFEDBF;--blue:#1D4E89;--lamp:#C3CDD7;--hot:#C8102E;--stripe:linear-gradient(#C8102E 0 7px,#1D4E89 7px 10px);--display:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;--body:"Barlow","Segoe UI",system-ui,-apple-system,sans-serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A141E;--surface:#112030;--ink:#E7EEF4;--ink-2:#A9B7C5;--ink-3:#8494A4;--line:#22354A;--red:#E0334A;--on-red:#FFFFFF;--red-soft:#3B1820;--amber:#F3C452;--amber-soft:#3A2D0E;--blue:#7AA9E3;--lamp:#2A394A;--hot:#E0334A;--stripe:linear-gradient(#E0334A 0 7px,#7AA9E3 7px 10px);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A141E;--surface:#112030;--ink:#E7EEF4;--ink-2:#A9B7C5;--ink-3:#8494A4;--line:#22354A;--red:#E0334A;--on-red:#FFFFFF;--red-soft:#3B1820;--amber:#F3C452;--amber-soft:#3A2D0E;--blue:#7AA9E3;--lamp:#2A394A;--hot:#E0334A;--stripe:linear-gradient(#E0334A 0 7px,#7AA9E3 7px 10px);color-scheme:dark}
+:root[data-club="OTT"]{--red:#C8102E;--on-red:#FFFFFF;--red-soft:#F5D3D8;--blue:#010101;--hot:#010101;--stripe:linear-gradient(#010101 0 4px,#C8102E 4px 7px,#C69214 7px 10px)}
+:root[data-club="TOR"]{--red:#00205B;--on-red:#FFFFFF;--red-soft:#D5DCE9;--blue:#00205B;--hot:#00205B;--stripe:linear-gradient(#00205B 0 6px,#FFFFFF 6px 8px,#00205B 8px 10px)}
+:root[data-club="EDM"]{--red:#FC4C02;--on-red:#041E42;--red-soft:#FFD9C7;--blue:#041E42;--hot:#041E42;--stripe:linear-gradient(#041E42 0 5px,#FC4C02 5px 10px)}
+:root[data-club="CGY"]{--red:#CE1126;--on-red:#FFFFFF;--red-soft:#F6D2D6;--blue:#CE1126;--hot:#CE1126;--stripe:linear-gradient(#CE1126 0 5px,#F3BC52 5px 8px,#111111 8px 10px)}
+@media (prefers-color-scheme:dark){:root[data-club="OTT"]:not([data-theme="light"]){--red:#C8102E;--on-red:#FFFFFF;--red-soft:#3A1218;--blue:#C69214;--hot:#C8102E}:root[data-club="TOR"]:not([data-theme="light"]){--red:#FFFFFF;--on-red:#00205B;--red-soft:#1C2F55;--blue:#FFFFFF;--hot:#FFFFFF}:root[data-club="EDM"]:not([data-theme="light"]){--red:#FC4C02;--on-red:#041E42;--red-soft:#3D1A0A;--blue:#FFFFFF;--hot:#FC4C02}:root[data-club="CGY"]:not([data-theme="light"]){--red:#CE1126;--on-red:#FFFFFF;--red-soft:#3A1117;--blue:#F3BC52;--hot:#F3BC52}}
+:root[data-club="OTT"][data-theme="dark"]{--red:#C8102E;--on-red:#FFFFFF;--red-soft:#3A1218;--blue:#C69214;--hot:#C8102E}
+:root[data-club="TOR"][data-theme="dark"]{--red:#FFFFFF;--on-red:#00205B;--red-soft:#1C2F55;--blue:#FFFFFF;--hot:#FFFFFF}
+:root[data-club="EDM"][data-theme="dark"]{--red:#FC4C02;--on-red:#041E42;--red-soft:#3D1A0A;--blue:#FFFFFF;--hot:#FC4C02}
+:root[data-club="CGY"][data-theme="dark"]{--red:#CE1126;--on-red:#FFFFFF;--red-soft:#3A1117;--blue:#F3BC52;--hot:#F3BC52}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);-webkit-text-size-adjust:100%}
+body::before{content:"";display:block;height:10px;background:var(--stripe)}
 main{max-width:760px;margin:0 auto;padding:28px 20px 56px}
 button{font:inherit;color:inherit}
 button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -26,7 +36,7 @@ section{margin-top:44px}
 .lamp.on{background:var(--red);box-shadow:0 0 0 10px var(--red-soft)}
 .q{font:500 19px/1.2 var(--display);color:var(--ink-2);margin:0}
 .ans{font:700 clamp(68px,17vw,116px)/.86 var(--display);margin:4px 0 12px}
-.ans.yes{color:var(--red)}
+.ans.yes{color:var(--hot)}
 .why{font-size:19px;line-height:1.45;margin:0;max-width:46ch}
 .rows{margin:26px 0 0;border-top:1px solid var(--line)}
 .row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
@@ -67,9 +77,14 @@ section{margin-top:44px}
 .sw{width:38px;height:22px;border-radius:11px;background:var(--lamp);position:relative;flex:none}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#FFFFFF;transition:transform .15s ease-out}
 .tm[aria-checked="true"] .sw{background:var(--red)}
-.tm[aria-checked="true"] .sw::after{transform:translateX(16px)}
+.tm[aria-checked="true"] .sw::after{transform:translateX(16px);background:var(--on-red)}
 .tn{display:block;font:600 19px/1.1 var(--display)}
 .tr{display:block;font-size:14px;color:var(--ink-2)}
+.themes{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 28px}
+.tl{font:600 16px/1 var(--display);color:var(--ink-2);margin-right:4px}
+.th{appearance:none;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px 5px 5px;font:500 14px/1 var(--body);cursor:pointer;min-height:34px}
+.th[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.dot{width:22px;height:22px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(127,127,127,.35)}
 .fine{font-size:14px;color:var(--ink-3);margin:44px 0 0;max-width:62ch}
 @media (max-width:540px){.hero{gap:16px}.lamp{width:48px;height:48px}.lamp.on{box-shadow:0 0 0 7px var(--red-soft)}.why{font-size:17px}.row{grid-template-columns:96px minmax(0,1fr)}.c,.blank{min-height:52px}.c{padding:5px}.c .n{font-size:16px}.c .mk{font-size:0}.c .mk:not(:empty)::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor}}
 @media (prefers-reduced-motion:no-preference){.lamp.on.flash{animation:flash .8s ease-out 2}}
@@ -87,7 +102,7 @@ section{margin-top:44px}
   var TEAMS = { OTT: "Senators", TOR: "Leafs", EDM: "Oilers", CGY: "Flames", VAN: "Canucks", WPG: "Jets", MTL: "Canadiens" };
   var ORDER = ["OTT", "TOR", "EDM", "CGY", "VAN", "WPG", "MTL"];
   var DEFAULT_ON = ["OTT", "TOR", "EDM", "CGY"];
-  var NOTES = { VAN: "Firehouse partner, not confirmed", WPG: "Not confirmed", MTL: "Not confirmed" };
+  var NOTES = {};
   var OPP = { NYI: "Islanders", SEA: "Kraken", BOS: "Bruins", NSH: "Predators", ANA: "Ducks", PHI: "Flyers", DET: "Red Wings", PIT: "Penguins", CAR: "Hurricanes", VGK: "Golden Knights", COL: "Avalanche", NJ: "Devils", NYR: "Rangers", SJ: "Sharks", LA: "Kings", UTA: "Mammoth", STL: "Blues", BUF: "Sabres", FLA: "Panthers", TB: "Lightning", TBL: "Lightning", NJD: "Devils", SJS: "Sharks", LAK: "Kings", MIN: "Wild", CBJ: "Blue Jackets", DAL: "Stars", CHI: "Blackhawks", WSH: "Capitals" };
   var WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   var WDL = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -205,6 +220,24 @@ section{margin-top:44px}
     return h;
   }
 
+  var CLUBS = [
+    { c: "", n: "Firehouse", a: "#C8102E", b: "#1D4E89" },
+    { c: "OTT", n: "Senators", a: "#C8102E", b: "#010101" },
+    { c: "TOR", n: "Leafs", a: "#00205B", b: "#FFFFFF" },
+    { c: "EDM", n: "Oilers", a: "#FC4C02", b: "#041E42" },
+    { c: "CGY", n: "Flames", a: "#CE1126", b: "#F3BC52" }
+  ];
+  var LS_CLUB = "bogo-club-v1";
+  var club = lsGet(LS_CLUB) || "";
+  if (!CLUBS.some(function (x) { return x.c === club; })) club = "";
+  function applyClub() { if (club) document.documentElement.setAttribute("data-club", club); else document.documentElement.removeAttribute("data-club"); }
+  applyClub();
+  function themesHTML() {
+    return '<div class="themes" role="group" aria-label="Theme"><span class="tl" aria-hidden="true">Theme</span>' + CLUBS.map(function (x) {
+      return '<button class="th" data-club-pick="' + x.c + '" aria-pressed="' + (club === x.c) + '"><span class="dot" aria-hidden="true" style="background:linear-gradient(135deg,' + x.a + ' 50%,' + x.b + ' 50%)"></span>' + x.n + "</button>";
+    }).join("") + "</div>";
+  }
+
   var LABEL = { yes: "BOGO day", no: "No BOGO", pre: "Opening night", possible: "BOGO possible", unlogged: "Waiting on a result", later: "No BOGO expected" };
   function calHTML() {
     var h = '<section aria-labelledby="cal-h"><h2 id="cal-h">Season so far</h2><p class="sub">Each day shows whether the BOGO was good that day, based on the night before.</p>';
@@ -254,7 +287,7 @@ section{margin-top:44px}
   }
 
   function teamsHTML() {
-    var h = '<section aria-labelledby="tm-h"><h2 id="tm-h">Teams that count</h2><p class="sub">Senators, Leafs, Oilers and Flames are on by default. Turn on another team if the Firehouse app shows the offer after one of its wins.</p><div class="teams">';
+    var h = '<section aria-labelledby="tm-h"><h2 id="tm-h">Teams that count</h2><p class="sub">The Senators, Leafs, Oilers and Flames are the teams in the deal. Turn a team on or off to choose whose wins count here.</p><div class="teams">';
     ORDER.forEach(function (t) {
       h += '<button class="tm" role="switch" aria-checked="' + on.has(t) + '" data-team="' + t + '"><span class="sw" aria-hidden="true"></span><span><span class="tn">' + TEAMS[t] + '</span><span class="tr">' + rec(t) + " so far</span>" + (NOTES[t] ? '<span class="tr">' + NOTES[t] + "</span>" : "") + "</span></button>";
     });
@@ -272,20 +305,22 @@ section{margin-top:44px}
     if (!el || !app.contains(el) || !el.dataset) return null;
     if (el.dataset.day) return '[data-day="' + el.dataset.day + '"]';
     if (el.dataset.team) return '[data-team="' + el.dataset.team + '"]';
+    if (el.hasAttribute("data-club-pick")) return '[data-club-pick="' + el.getAttribute("data-club-pick") + '"]';
     if (el.dataset.pick) return '[data-pick="' + el.dataset.pick + '"][data-w="' + el.dataset.w + '"]';
     if (el.hasAttribute("data-save")) return "[data-save]";
     return null;
   }
   function render() {
     var k = keyOf(document.activeElement);
-    app.innerHTML = heroHTML() + calHTML() + logHTML() + teamsHTML() + footHTML();
+    app.innerHTML = themesHTML() + heroHTML() + calHTML() + logHTML() + teamsHTML() + footHTML();
     if (k) { var el = app.querySelector(k); if (el) el.focus(); }
     first = false;
   }
 
   app.addEventListener("click", function (e) {
-    var t = e.target.closest("[data-day],[data-team],[data-pick],[data-save]");
+    var t = e.target.closest("[data-day],[data-team],[data-pick],[data-save],[data-club-pick]");
     if (!t) return;
+    if (t.hasAttribute("data-club-pick")) { club = t.getAttribute("data-club-pick"); lsSet(LS_CLUB, club); applyClub(); render(); return; }
     if (t.dataset.day) { selected = selected === t.dataset.day ? null : t.dataset.day; render(); return; }
     if (t.dataset.team) {
       var tm = t.dataset.team;
